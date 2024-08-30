@@ -75,7 +75,7 @@ postServiceCheck:
                                             NULL,
                                             NULL,
                                             &m_card_context);
-    } while(result == SCARD_E_NO_SERVICE || result == SCARD_E_SERVICE_STOPPED);
+    } while(result == static_cast<LONG>(SCARD_E_NO_SERVICE) || result == static_cast<LONG>(SCARD_E_SERVICE_STOPPED));
     if (result != SCARD_S_SUCCESS) {
         Nan::ThrowError(error_msg("SCardEstablishContext", result).c_str());
     } else {
@@ -338,7 +338,7 @@ LONG PCSCLite::get_card_readers(PCSCLite* pcsclite, AsyncResult* async_result) {
             result = get_card_readers(pcsclite, async_result);
         }
 #endif
-        if (result == SCARD_E_NO_SERVICE || result == SCARD_E_SERVICE_STOPPED) {
+        if (result == static_cast<LONG>(SCARD_E_NO_SERVICE) || result == static_cast<LONG>(SCARD_E_SERVICE_STOPPED)) {
             SCardReleaseContext(pcsclite->m_card_context);
             SCardEstablishContext(SCARD_SCOPE_SYSTEM, NULL, NULL, &pcsclite->m_card_context);
             result = get_card_readers(pcsclite, async_result);
